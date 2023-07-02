@@ -8,11 +8,15 @@ set(CMAKE_CXX_STANDARD 20)
 set(RL_DIR src/thirdparty/raylib)
 add_subdirectory(${RL_DIR})
 
+set(RG_DIR src/thirdparty/raygui)
+
 add_executable(${PROJECT_NAME} 
+								src/impl.c
 								src/main.c
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC src)
 target_include_directories(${PROJECT_NAME} PUBLIC ${RL_DIR}/src)
+target_include_directories(${PROJECT_NAME} PUBLIC ${RG_DIR}/src)
 
 target_link_libraries(${PROJECT_NAME} raylib)
