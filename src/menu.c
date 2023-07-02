@@ -2,8 +2,8 @@
 #include "raylib.h"
 #include <stdlib.h>
 
-#define TOGGLE_WIDTH 100
-#define TOGGLE_HEIGHT 50
+#define TOGGLE_WIDTH_RATIO 100 / 1024
+#define TOGGLE_HEIGHT_RATIO 50 / 576
 
 struct at_toggle_s
 {
@@ -14,31 +14,53 @@ struct at_toggle_s
 
 typedef struct at_toggle_s Toggle;
 
+struct at_window_s
+{
+	Rectangle rect;
+	const char* title;
+	bool active;
+};
+
+typedef struct at_window_s Window;
+
 Toggle new_game;
 Toggle toggle_settings;
 Toggle toggle_quit;
+
+Window win_settings;
 
 bool draw_toggle(Toggle* toggle)
 {
 	return GuiToggle(toggle->rect, toggle->text, toggle->active);
 }
 
+bool draw_window(Window* win)
+{
+	return GuiWindowBox(win->rect, win->title);
+}
+
 void menu_init()
 {
-	int ypos = 200;
+	win_settings.rect = (Rectangle){120, 10, 800, 500};
+	win_settings.title = "Settings";
+
+	int ypos = 0.4 * GetScreenHeight();
 	int screen_y = GetScreenHeight();
 
-	new_game.rect = (Rectangle){10, ypos, TOGGLE_WIDTH, TOGGLE_HEIGHT};
+	int toggle_width = GetScreenWidth() * TOGGLE_WIDTH_RATIO;
+	int toggle_height = GetScreenHeight() * TOGGLE_HEIGHT_RATIO
+	;
+	new_game.rect = (Rectangle){10, ypos, toggle_width, toggle_height};
 	new_game.text = "New Game";
 
 	ypos += 0.1 * screen_y;
 
-	toggle_settings.rect = (Rectangle){10, ypos, TOGGLE_WIDTH, TOGGLE_HEIGHT};
+	toggle_settings.rect = (Rectangle){10, ypos, toggle_width, toggle_height};
 	toggle_settings.text = "Settings";
 
 	ypos += 0.1 * screen_y;
 
-	toggle_quit.rect = (Rectangle){10, ypos, TOGGLE_WIDTH, TOGGLE_HEIGHT};
+	toggle_quit.rect = (Rectangle){10, ypos, toggle_width, toggle_height};
 	toggle_quit.text = "Quit";
 }
 
@@ -53,12 +75,20 @@ void menu_draw()
 
 	if(draw_toggle(&toggle_settings))
 	{
-		//TODO(Fix): Settings
+		win_settings.active = true;
 	}
 
 	if(draw_toggle(&toggle_quit))
 	{
 		CloseWindow();
 		exit(0); //TODO(Fix): don't do this, lmao
+	}
+
+	if(win_settings.active)
+	{
+		if(draw_window(&win_settings))
+		{
+			win_settings.active = !win_settings.active;
+		}
 	}
 }
