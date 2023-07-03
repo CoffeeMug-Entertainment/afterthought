@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include "menu.h"
+#include "ingame.h"
 #include <stdio.h> 
 
 enum GAME_STATE
@@ -11,6 +12,7 @@ enum GAME_STATE
 
 int current_state;
 void (*draw_current)();
+void (*tick_current)();
 
 void change_game_state(unsigned int new_state)
 {
@@ -22,6 +24,9 @@ void change_game_state(unsigned int new_state)
 			menu_init();
 			draw_current = &menu_draw;
 			break;
+		case GSTATE_ONMAP:
+			ingame_init();
+			draw_current = &ingame_draw;
 		case GSTATE_INVALID:
 		default:
 			break;

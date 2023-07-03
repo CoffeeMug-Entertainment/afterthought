@@ -2,6 +2,8 @@
 #include "raylib.h"
 #include <stdlib.h>
 
+void change_game_state(unsigned int new_state);
+
 #define TOGGLE_WIDTH_RATIO 100 / 1024
 #define TOGGLE_HEIGHT_RATIO 50 / 576
 
@@ -27,6 +29,7 @@ Toggle new_game;
 Toggle toggle_settings;
 Toggle toggle_quit;
 
+//Settings Window
 Window win_settings;
 
 bool draw_toggle(Toggle* toggle)
@@ -69,8 +72,7 @@ void menu_draw()
 	ClearBackground(RAYWHITE);
 	if(draw_toggle(&new_game))
 	{
-		DrawText("oops", 400, 400, 20, BLACK);
-		new_game.active = !new_game.active;
+		change_game_state(2);
 	}
 
 	if(draw_toggle(&toggle_settings))
@@ -86,7 +88,10 @@ void menu_draw()
 
 	if(win_settings.active)
 	{
-		if(draw_window(&win_settings))
+		bool shouldClose = draw_window(&win_settings);
+		DrawText("Resolution", win_settings.rect.x + 5, win_settings.rect.y + 30, 10, LIGHTGRAY);
+
+		if(shouldClose)
 		{
 			win_settings.active = !win_settings.active;
 		}
