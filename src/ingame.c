@@ -1,5 +1,10 @@
+#include "world.h"
+#include "tile.h"
+
 #include "raygui.h"
 #include "raylib.h"
+
+#include <string.h>
 
 enum GAME_TABS
 {
@@ -19,6 +24,9 @@ typedef struct at_tabbar_s TabBar;
 
 TabBar tab_game;
 
+World game_world;
+char map_str[WORLD_WIDTH * WORLD_HEIGHT + WORLD_HEIGHT];
+
 const char* text[] =
 {
 		"Map",
@@ -27,12 +35,41 @@ const char* text[] =
 		"Fourth"
 };
 
+//UGLY(Fix): I tried to be smart about this, but the strings defeated me. In the end, this garbage was written
+void generate_map_string()
+{
+	char tempLine[WORLD_WIDTH + 2]; //2 extra: 1 for newline, 1 for null-term
+
+	for(int y = 0; y < WORLD_HEIGHT; ++y)
+	{
+		for(int x = 0; x < WORLD_WIDTH; ++x)
+		{
+			int i = x + y * WORLD_WIDTH;
+			tempLine[x] = tiles[game_world.map_tiles[i]].symbol;
+		}
+
+		tempLine[WORLD_WIDTH] = '\n';
+		tempLine[WORLD_WIDTH + 1] = '\0';
+		strcat(map_str, tempLine);
+	}
+}
+
 void ingame_init()
 {
 	tab_game.rect = (Rectangle){10, 10, GetScreenWidth() - 10, 30};
 	tab_game.text = text;
 	tab_game.count = 4;
 	tab_game.active = 0;
+
+	generate_map(&game_world);
+	generate_map_string();
+}
+
+
+void map_draw()
+{
+	//generate_map_string();
+	DrawText(map_str, 10, 40, 30, BLACK);
 }
 
 void ingame_draw()
@@ -43,7 +80,7 @@ void ingame_draw()
 	switch(tab_game.active)
 	{
 		case TAB_MAP:
-			DrawText("Map", 192, 168, 20, BLACK);
+			map_draw();
 		default:
 			break;
 	}

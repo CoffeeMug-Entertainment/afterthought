@@ -13,6 +13,8 @@ set(RG_DIR src/thirdparty/raygui)
 add_executable(${PROJECT_NAME} 
 								src/impl.c
 								src/menu.c
+								src/world.c
+								src/tile.c
 								src/ingame.c
 								src/main.c
 )
