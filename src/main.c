@@ -1,7 +1,10 @@
-#include "raylib.h"
 #include "menu.h"
 #include "ingame.h"
+
+#include "raylib.h"
+
 #include <stdio.h> 
+#include <time.h>
 
 enum GAME_STATE
 {
@@ -42,6 +45,7 @@ int main(int argc, char const *argv[])
 	SetTargetFPS(60);
 
 	change_game_state(GSTATE_MAINMENU);
+	SetRandomSeed((unsigned int )time(NULL));
 
 	while (!WindowShouldClose()) 
 	{
@@ -55,3 +59,4 @@ int main(int argc, char const *argv[])
 	CloseWindow();
 	return 0;
 }
+

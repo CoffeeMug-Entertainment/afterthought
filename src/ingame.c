@@ -1,5 +1,6 @@
 #include "world.h"
 #include "tile.h"
+#include "citizen.h"
 
 #include "raygui.h"
 #include "raylib.h"
@@ -54,6 +55,7 @@ void generate_map_string()
 	}
 }
 
+#include <stdio.h>
 void ingame_init()
 {
 	tab_game.rect = (Rectangle){10, 10, GetScreenWidth() - 10, 30};
@@ -63,13 +65,16 @@ void ingame_init()
 
 	generate_map(&game_world);
 	generate_map_string();
+
+	Citizen cit = citizen_generate();
+	printf("Generated %s, age: %d\n", cit.name, cit.age);
 }
 
 
 void map_draw()
 {
 	//generate_map_string();
-	DrawText(map_str, 10, 40, 30, BLACK);
+	DrawText(map_str, 10, 40, 10, BLACK);
 }
 
 void ingame_draw()

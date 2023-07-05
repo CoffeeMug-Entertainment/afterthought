@@ -3,7 +3,6 @@ project(afterthought VERSION 0.1.0)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_C_STANDARD 23)
-set(CMAKE_CXX_STANDARD 20)
 
 set(RL_DIR src/thirdparty/raylib)
 add_subdirectory(${RL_DIR})
@@ -15,6 +14,7 @@ add_executable(${PROJECT_NAME}
 								src/menu.c
 								src/world.c
 								src/tile.c
+								src/citizen.c
 								src/ingame.c
 								src/main.c
 )
