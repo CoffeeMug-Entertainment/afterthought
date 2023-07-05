@@ -51,8 +51,8 @@ void menu_init()
 	int screen_y = GetScreenHeight();
 
 	int toggle_width = GetScreenWidth() * TOGGLE_WIDTH_RATIO;
-	int toggle_height = GetScreenHeight() * TOGGLE_HEIGHT_RATIO
-	;
+	int toggle_height = GetScreenHeight() * TOGGLE_HEIGHT_RATIO;
+	
 	new_game.rect = (Rectangle){10, ypos, toggle_width, toggle_height};
 	new_game.text = "New Game";
 
