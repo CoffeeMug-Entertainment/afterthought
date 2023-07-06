@@ -1,5 +1,6 @@
 #include "menu.h"
 #include "ingame.h"
+#include "rsrc/font_SpaceMono.h"
 
 #include "raylib.h"
 
@@ -47,6 +48,8 @@ int main(int argc, char const *argv[])
 	change_game_state(GSTATE_MAINMENU);
 	SetRandomSeed((unsigned int )time(NULL));
 
+	Font_SpaceMono = LoadFont_SpaceMono();
+
 	while (!WindowShouldClose()) 
 	{
 		BeginDrawing();
@@ -59,4 +62,3 @@ int main(int argc, char const *argv[])
 	CloseWindow();
 	return 0;
 }
-

@@ -1,6 +1,7 @@
 #include "world.h"
 #include "tile.h"
 #include "citizen.h"
+#include "settlement.h"
 
 #include "raygui.h"
 #include "raylib.h"
@@ -10,7 +11,8 @@
 enum GAME_TABS
 {
 	TAB_MAP,
-	TAB_SETTLEMENT
+	TAB_SETTLEMENT,
+	TAB_CITIZENS
 };
 
 struct at_tabbar_s
@@ -26,13 +28,14 @@ typedef struct at_tabbar_s TabBar;
 TabBar tab_game;
 
 World game_world;
+Settlement player_settlement;
 char map_str[WORLD_WIDTH * WORLD_HEIGHT + WORLD_HEIGHT];
 
 const char* text[] =
 {
 		"Map",
 		"Settlement",
-		"Third",
+		"Citizens",
 		"Fourth"
 };
 
@@ -53,9 +56,10 @@ void generate_map_string()
 		tempLine[WORLD_WIDTH + 1] = '\0';
 		strcat(map_str, tempLine);
 	}
+
+	map_str[player_settlement.location] = '@';
 }
 
-#include <stdio.h>
 void ingame_init()
 {
 	tab_game.rect = (Rectangle){10, 10, GetScreenWidth() - 10, 30};
@@ -63,19 +67,27 @@ void ingame_init()
 	tab_game.count = 4;
 	tab_game.active = 0;
 
+	player_settlement = settlement_generate();
+	strcpy(player_settlement.name, "Your Settlement");
+
 	generate_map(&game_world);
 	generate_map_string();
-
-	Citizen cit = citizen_generate();
-	printf("Generated %s, age: %d\n", cit.name, cit.age);
 }
 
+extern Font Font_SpaceMono;
 
 void map_draw()
 {
-	//generate_map_string();
-	DrawText(map_str, 10, 40, 10, BLACK);
+	static Vector2 pos = (Vector2){10, 40};
+	DrawTextEx(Font_SpaceMono, map_str, pos, 36, 0, BLACK);
 }
+
+void settlement_draw()
+{
+	DrawText(player_settlement.name, 10, 42, 18, BLACK);
+}
+
+void citizens_draw();
 
 void ingame_draw()
 {
@@ -86,6 +98,10 @@ void ingame_draw()
 	{
 		case TAB_MAP:
 			map_draw();
+			break;
+		case TAB_SETTLEMENT:
+			settlement_draw();
+			break;
 		default:
 			break;
 	}

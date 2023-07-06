@@ -10,10 +10,12 @@ add_subdirectory(${RL_DIR})
 set(RG_DIR src/thirdparty/raygui)
 
 add_executable(${PROJECT_NAME} 
+								src/rsrc/font_SpaceMono.c
 								src/impl.c
 								src/menu.c
 								src/world.c
 								src/tile.c
+								src/settlement.c
 								src/citizen.c
 								src/ingame.c
 								src/main.c
