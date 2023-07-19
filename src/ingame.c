@@ -49,7 +49,7 @@ void generate_map_string()
 		for(int x = 0; x < WORLD_WIDTH; ++x)
 		{
 			int i = x + y * WORLD_WIDTH;
-			tempLine[x] = tiles[game_world.map_tiles[i]].symbol;
+			tempLine[x] = tiles[game_world.map_tiles[y][x]].symbol;
 		}
 
 		tempLine[WORLD_WIDTH] = '\n';

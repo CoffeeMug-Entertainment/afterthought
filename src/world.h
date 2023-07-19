@@ -7,7 +7,7 @@
 struct world_s
 {
 	char* name;
-	unsigned int map_tiles[WORLD_WIDTH * WORLD_HEIGHT];
+	unsigned int map_tiles[WORLD_HEIGHT][WORLD_WIDTH];
 };
 
 typedef struct world_s World;
