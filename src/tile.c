@@ -8,3 +8,8 @@ Tile tiles[] =
 
 };
 
+
+char get_tile_symbol(unsigned int type)
+{
+	return tiles[type].symbol;
+}

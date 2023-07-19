@@ -14,4 +14,6 @@ typedef struct world_s World;
 
 void generate_map(World* world);
 
+unsigned int get_tile(World* world, int x, int y);
+
 #endif
