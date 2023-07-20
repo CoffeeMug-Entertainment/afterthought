@@ -1,11 +1,14 @@
 #ifndef AT_TILE_H
-#define AT_TILE_H 1
+#define AT_TILE_H
+
+#include "raylib.h"
 
 enum TILE_TYPE
 {
 	TILE_NOTHING = 0,
 	TILE_WALK,
-	TILE_WALL
+	TILE_WALL,
+	TILE_FOREST
 };
 
 struct tile_s
@@ -15,7 +18,6 @@ struct tile_s
 };
 
 typedef struct tile_s Tile;
-
 
 extern Tile tiles[];
 #endif
