@@ -2,6 +2,7 @@
 #include "tile.h"
 #include "citizen.h"
 #include "settlement.h"
+#include "entity.h"
 #include "drawing.h"
 
 #include "raygui.h"
@@ -30,6 +31,8 @@ TabBar tab_game;
 
 World game_world;
 Settlement player_settlement;
+unsigned int entity_count = 0;
+Entity entities[256];
 char map_str[WORLD_WIDTH * WORLD_HEIGHT + WORLD_HEIGHT];
 
 const char* text[] =
@@ -41,6 +44,7 @@ const char* text[] =
 };
 
 
+#include "entities/george.h"
 void ingame_init()
 {
 	tab_game.rect = (Rectangle){10, 10, GetScreenWidth() - 10, 30};
@@ -52,6 +56,16 @@ void ingame_init()
 	strcpy(player_settlement.name, "Your Settlement");
 
 	generate_map(&game_world);
+
+	spawn_george(&entities[0]);
+	entities[0].pos.x = 3;
+	entities[0].pos.x = 2;
+	entity_count++;
+}
+
+void ingame_tick(void)
+{
+	entities[0].tick(&entities[0]);
 }
 
 extern Font Font_SpaceMono;
@@ -68,6 +82,11 @@ void map_draw()
 	}
 
 	DrawChar((Vector2){0, 1}, player_settlement.location, YELLOW);
+
+	for (int i = 0; i < entity_count; ++i)
+	{
+		DrawChar(entities[i].spritesheet_pos, entities[i].pos, GREEN);
+	}
 }
 
 void settlement_draw()
