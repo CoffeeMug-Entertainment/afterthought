@@ -2,6 +2,7 @@
 #include "tile.h"
 #include "citizen.h"
 #include "settlement.h"
+#include "drawing.h"
 
 #include "raygui.h"
 #include "raylib.h"
@@ -39,26 +40,6 @@ const char* text[] =
 		"Fourth"
 };
 
-//UGLY(Fix): I tried to be smart about this, but the strings defeated me. In the end, this garbage was written
-void generate_map_string()
-{
-	char tempLine[WORLD_WIDTH + 2]; //2 extra: 1 for newline, 1 for null-term
-
-	for(int y = 0; y < WORLD_HEIGHT; ++y)
-	{
-		for(int x = 0; x < WORLD_WIDTH; ++x)
-		{
-			int i = x + y * WORLD_WIDTH;
-			tempLine[x] = get_tile_symbol(get_tile(&game_world, x, y));
-		}
-
-		tempLine[WORLD_WIDTH] = '\n';
-		tempLine[WORLD_WIDTH + 1] = '\0';
-		strcat(map_str, tempLine);
-	}
-
-	map_str[(int)(player_settlement.location.x + player_settlement.location.y * WORLD_WIDTH)] = '@';
-}
 
 void ingame_init()
 {
@@ -71,27 +52,37 @@ void ingame_init()
 	strcpy(player_settlement.name, "Your Settlement");
 
 	generate_map(&game_world);
-	generate_map_string();
 }
 
 extern Font Font_SpaceMono;
 
 void map_draw()
 {
-	static Vector2 pos = (Vector2){10, 40};
-	DrawTextEx(Font_SpaceMono, map_str, pos, 36, 0, BLACK);
+	for(int y = 0; y < WORLD_HEIGHT; ++y)
+	{
+		for(int x = 0; x < WORLD_WIDTH; ++x)
+		{
+			Vector2 sheet_tile = tiles[get_tile(&game_world, x, y)].spritesheet_pos;
+			DrawChar(sheet_tile, (Vector2){x, y}, RAYWHITE);
+		}
+	}
+
+	DrawChar((Vector2){0, 1}, player_settlement.location, YELLOW);
 }
 
 void settlement_draw()
 {
-	DrawText(player_settlement.name, 10, 42, 18, BLACK);
+	DrawText(player_settlement.name, 10, 42, 18, RAYWHITE);
 }
 
-void citizens_draw();
+void citizens_draw()
+{
+	
+}
 
 void ingame_draw()
 {
-	ClearBackground(RAYWHITE);
+	ClearBackground(DARKGRAY);
 	GuiTabBar(tab_game.rect, tab_game.text, tab_game.count, &tab_game.active);
 
 	switch(tab_game.active)
@@ -102,6 +93,8 @@ void ingame_draw()
 		case TAB_SETTLEMENT:
 			settlement_draw();
 			break;
+		case TAB_CITIZENS:
+			citizens_draw();
 		default:
 			break;
 	}

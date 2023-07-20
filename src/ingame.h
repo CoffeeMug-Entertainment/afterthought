@@ -3,5 +3,6 @@
 
 void ingame_init();
 void ingame_draw();
+void ingame_tick();
 
 #endif

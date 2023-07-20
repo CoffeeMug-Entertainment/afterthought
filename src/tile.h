@@ -10,13 +10,12 @@ enum TILE_TYPE
 
 struct tile_s
 {
-	char symbol;
+	Vector2 spritesheet_pos;
 	int pass_difficulty;
 };
 
 typedef struct tile_s Tile;
 
-char get_tile_symbol(unsigned int type);
 
 extern Tile tiles[];
 #endif
