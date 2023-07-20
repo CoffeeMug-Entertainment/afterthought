@@ -2,6 +2,7 @@
 #define AT_SETTLEMENT_H 1
 
 #include "citizen.h"
+#include "raylib.h"
 
 struct at_settlement_s
 {
@@ -10,7 +11,7 @@ struct at_settlement_s
 	Citizen citizens[150];
 	unsigned int population;
 
-	unsigned int location;
+	Vector2 location;
 };
 
 typedef struct at_settlement_s Settlement;

@@ -57,7 +57,7 @@ void generate_map_string()
 		strcat(map_str, tempLine);
 	}
 
-	map_str[player_settlement.location] = '@';
+	map_str[(int)(player_settlement.location.x + player_settlement.location.y * WORLD_WIDTH)] = '@';
 }
 
 void ingame_init()

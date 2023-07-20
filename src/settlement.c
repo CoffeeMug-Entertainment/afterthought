@@ -15,7 +15,8 @@ Settlement settlement_generate()
 		new_settlement.citizens[i] = citizen_generate();
 	}
 
-	new_settlement.location = GetRandomValue(10, WORLD_WIDTH * WORLD_HEIGHT - 10);
+	new_settlement.location.x  = GetRandomValue(1, WORLD_WIDTH - 2);
+	new_settlement.location.y  = GetRandomValue(1, WORLD_HEIGHT - 2);
 
 	return new_settlement;
 }
