@@ -1,8 +1,8 @@
 #ifndef AT_WORLD_H
 #define AT_WORLD_H 1
 
-#define WORLD_WIDTH 25
-#define WORLD_HEIGHT 25
+#define WORLD_WIDTH 20
+#define WORLD_HEIGHT 16
 
 struct world_s
 {
