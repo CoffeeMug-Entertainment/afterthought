@@ -56,14 +56,14 @@ int main(int argc, char const *argv[])
 	SetRandomSeed((unsigned int )time(NULL));
 
 	Font_SpaceMono = LoadFont_SpaceMono();
-	float last_tick_time;
+	float last_tick_time = 0.0f;
 
 	char_sheet = LoadTexture("./assets/spritesheet.png");
 
 	while (!WindowShouldClose()) 
 	{
 		last_tick_time += GetFrameTime();
-		if(last_tick_time < 1.0f/10.0f)
+		if(last_tick_time > 1.0f)
 		{
 			tick_current();
 			last_tick_time = 0.0f;
