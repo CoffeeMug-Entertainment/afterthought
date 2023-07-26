@@ -1,20 +1,32 @@
 #include "entity.h"
 #include "pathfinding.h"
+#include "world.h"
 
+#include "raylib.h"
 #include "raymath.h"
 #include <string.h>
 
 void george_init(Entity *self)
 {
+	self->pos.x = GetRandomValue(0, WORLD_WIDTH - 1);
+	self->pos.y = GetRandomValue(0, WORLD_HEIGHT - 1);
 
+	self->target_pos.x = GetRandomValue(0, WORLD_WIDTH -1);
+	self->target_pos.y = GetRandomValue(0, WORLD_HEIGHT -1 );
 }
 
 #include <stdio.h>
 void george_tick(Entity *self)
 {
-	//self->move_dir = path_move_dir(self->pos, self->target_pos);
-	//self->pos = Vector2Add(self->pos, self->move_dir);
-	//self->move_dir = Vector2Zero();
+	if(self->pos.x == self->target_pos.x && self->pos.y == self->target_pos.y)
+	{
+		self->target_pos.x = GetRandomValue(0, WORLD_WIDTH - 1);
+		self->target_pos.y = GetRandomValue(0, WORLD_HEIGHT - 1);
+	}
+
+	self->move_dir = path_move_dir(self->pos, self->target_pos);
+	self->pos = Vector2Add(self->pos, self->move_dir);
+	self->move_dir = Vector2Zero();
 }
 
 void spawn_george(Entity *self)

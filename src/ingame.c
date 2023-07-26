@@ -3,11 +3,13 @@
 #include "citizen.h"
 #include "settlement.h"
 #include "entity.h"
+
 #include "drawing.h"
 
 #include "raygui.h"
 #include "raylib.h"
 
+#include <stdio.h>
 #include <string.h>
 
 enum GAME_TABS
@@ -58,9 +60,9 @@ void ingame_init()
 	generate_map(&game_world);
 
 	spawn_george(&entities[0]);
-	entities[0].pos.x = 3;
-	entities[0].pos.x = 2;
 	entity_count++;
+
+	entities[0].init(&entities[0]);
 }
 
 void ingame_tick(void)
