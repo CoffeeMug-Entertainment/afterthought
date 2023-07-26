@@ -12,6 +12,7 @@ set(RG_DIR src/thirdparty/raygui)
 add_executable(${PROJECT_NAME} 
 								src/rsrc/font_SpaceMono.c
 								src/impl.c
+								src/pathfinding.c
 								src/menu.c
 								src/world.c
 								src/tile.c
