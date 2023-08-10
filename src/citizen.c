@@ -42,6 +42,7 @@ Citizen citizen_generate()
 
 	strcpy(new_citizen.name, name_str);
 	new_citizen.age = GetRandomValue(15, 35);
+	new_citizen.type = CIT_INACTIVE;
 
 	return new_citizen;
 }

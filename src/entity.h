@@ -1,6 +1,7 @@
 #ifndef AT_ENTITY_H
 #define AT_ENTITY_H
 
+#include "citizen.h"
 #include "raylib.h"
 
 struct entity_s
@@ -11,6 +12,8 @@ struct entity_s
 	Vector2 pos;
 	Vector2 move_dir;
 	Vector2 target_pos;
+
+	Citizen citizens[10];
 
 	void (*init)(struct entity_s *self);
 	void (*tick)(struct entity_s *self);

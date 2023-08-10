@@ -1,3 +1,4 @@
+#include "ui.h"
 #include "raygui.h"
 #include "raylib.h"
 #include <stdlib.h>
@@ -7,40 +8,12 @@ void change_game_state(unsigned int new_state);
 #define TOGGLE_WIDTH_RATIO 100 / 1024
 #define TOGGLE_HEIGHT_RATIO 50 / 576
 
-struct at_toggle_s
-{
-	Rectangle rect;
-	const char* text;
-	bool active;
-};
-
-typedef struct at_toggle_s Toggle;
-
-struct at_window_s
-{
-	Rectangle rect;
-	const char* title;
-	bool active;
-};
-
-typedef struct at_window_s Window;
-
 Toggle new_game;
 Toggle toggle_settings;
 Toggle toggle_quit;
 
 //Settings Window
 Window win_settings;
-
-bool draw_toggle(Toggle* toggle)
-{
-	return GuiToggle(toggle->rect, toggle->text, toggle->active);
-}
-
-bool draw_window(Window* win)
-{
-	return GuiWindowBox(win->rect, win->title);
-}
 
 void menu_init()
 {

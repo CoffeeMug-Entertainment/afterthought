@@ -4,6 +4,7 @@
 #include "settlement.h"
 #include "entity.h"
 
+#include "ui.h"
 #include "drawing.h"
 
 #include "raygui.h"
@@ -32,10 +33,17 @@ typedef struct at_tabbar_s TabBar;
 TabBar tab_game;
 
 World game_world;
-Settlement player_settlement;
 unsigned int entity_count = 0;
 Entity entities[256];
+Settlement settlements[3];
+Settlement *player_settlement;
 char map_str[WORLD_WIDTH * WORLD_HEIGHT + WORLD_HEIGHT];
+
+
+//Settlement Screen;
+Window production_window;
+Window storage_window;
+
 
 const char* text[] =
 {
@@ -54,8 +62,17 @@ void ingame_init()
 	tab_game.count = 4;
 	tab_game.active = 0;
 
-	player_settlement = settlement_generate();
-	strcpy(player_settlement.name, "Your Settlement");
+	settlements[0] = settlement_generate();
+
+	player_settlement = &settlements[0];
+	player_settlement->alignment = SET_PLAYER;
+	strcpy(player_settlement->name, "Your Settlement");
+
+	for (int i = 1; i < 3; ++i)
+	{
+		settlements[i] = settlement_generate();
+	}
+
 
 	generate_map(&game_world);
 
@@ -63,14 +80,26 @@ void ingame_init()
 	entity_count++;
 
 	entities[0].init(&entities[0]);
+
+	//Settlement Screen
+	production_window.title = "Production";
+	production_window.rect = (Rectangle){10, 60, 200, 200};
+	production_window.active = true;
+
+	storage_window.title = "Storage";
+	storage_window.rect = (Rectangle){220, 60, 200, 200};
+	storage_window.active = true;
 }
 
 void ingame_tick(void)
 {
 	entities[0].tick(&entities[0]);
+	for (int i = 0; i < 3; ++i)
+	{
+		settlement_tick(&settlements[i]);
+	}
 }
 
-extern Font Font_SpaceMono;
 
 void map_draw()
 {
@@ -83,7 +112,20 @@ void map_draw()
 		}
 	}
 
-	DrawChar((Vector2){0, 1}, player_settlement.location, YELLOW);
+	DrawChar((Vector2){0, 1}, player_settlement->location, YELLOW);
+	for (int i = 1; i < 3; ++i)
+	{
+		Color set_col = RAYWHITE;
+		if (settlements[i].alignment == SET_ALLY)
+		{
+			set_col = GREEN;
+		}
+		else if (settlements[i].alignment == SET_ENEMY)
+		{
+			set_col = RED;
+		}
+		DrawChar((Vector2){0, 1}, settlements[i].location, set_col);
+	}
 
 	for (int i = 0; i < entity_count; ++i)
 	{
@@ -91,14 +133,54 @@ void map_draw()
 	}
 }
 
+#define SUBWIND_CHAR_SIZE 10
+#define SUBWIND_TAB_PAD 25
+#define SUBWIND_CHAR_MARGIN 4
+
 void settlement_draw()
 {
-	DrawText(player_settlement.name, 10, 42, 18, RAYWHITE);
+	DrawText(player_settlement->name, 10, 42, 18, RAYWHITE);
+	//Production
+	draw_window(&production_window);
+	DrawText("Wood: ", production_window.rect.x + SUBWIND_CHAR_MARGIN, production_window.rect.y + SUBWIND_TAB_PAD + SUBWIND_CHAR_MARGIN, SUBWIND_CHAR_SIZE, BLACK);
+	char wood_amt[10];
+	snprintf(wood_amt, 10,"%d", player_settlement->prod_wood);
+	DrawText(wood_amt, production_window.rect.x + 6 * SUBWIND_CHAR_SIZE + SUBWIND_CHAR_MARGIN, production_window.rect.y + SUBWIND_TAB_PAD + SUBWIND_CHAR_MARGIN, SUBWIND_CHAR_SIZE, BLACK);
+
+	DrawText("Food: ", production_window.rect.x + SUBWIND_CHAR_MARGIN, production_window.rect.y + SUBWIND_TAB_PAD + SUBWIND_CHAR_SIZE + SUBWIND_CHAR_MARGIN, SUBWIND_CHAR_SIZE, BLACK);
+	snprintf(wood_amt, 10, "%d", player_settlement->prod_food);
+	DrawText(wood_amt, production_window.rect.x + 6 * SUBWIND_CHAR_SIZE + SUBWIND_CHAR_MARGIN, production_window.rect.y + SUBWIND_TAB_PAD + SUBWIND_CHAR_SIZE + SUBWIND_CHAR_MARGIN, SUBWIND_CHAR_SIZE, BLACK);
+
+	//Storage
+	draw_window(&storage_window);
+	DrawText("Wood: ", storage_window.rect.x + SUBWIND_CHAR_MARGIN, storage_window.rect.y + SUBWIND_TAB_PAD + SUBWIND_CHAR_MARGIN, SUBWIND_CHAR_SIZE, BLACK);
+	snprintf(wood_amt, 10, "%d", player_settlement->wood);
+	DrawText(wood_amt, storage_window.rect.x + 6 * SUBWIND_CHAR_SIZE + SUBWIND_CHAR_MARGIN, storage_window.rect.y + SUBWIND_TAB_PAD + SUBWIND_CHAR_MARGIN, SUBWIND_CHAR_SIZE, BLACK);
+
+	DrawText("Food: ", storage_window.rect.x + SUBWIND_CHAR_MARGIN, storage_window.rect.y + SUBWIND_TAB_PAD + SUBWIND_CHAR_SIZE + SUBWIND_CHAR_MARGIN, SUBWIND_CHAR_SIZE, BLACK);
+	snprintf(wood_amt, 10, "%d", player_settlement->food);
+	DrawText(wood_amt, storage_window.rect.x + 6 * SUBWIND_CHAR_SIZE + SUBWIND_CHAR_MARGIN, storage_window.rect.y + SUBWIND_TAB_PAD + SUBWIND_CHAR_SIZE + SUBWIND_CHAR_MARGIN, SUBWIND_CHAR_SIZE, BLACK);
+
 }
 
 void citizens_draw()
 {
-	
+	char list_items[SET_MAX_CITIZENS][50];
+	int scrollindex;
+	static int active_element = 0;
+	int active_count = 0;
+	for (int i = 0; i < SET_MAX_CITIZENS; ++i)
+	{
+		if (player_settlement->citizens[i].type == CIT_INACTIVE) continue;
+
+		active_count += 1;
+		//strcpy(list_items[i], player_settlement->citizens[i].name);
+		snprintf(list_items[i], 50, "%s", player_settlement->citizens[i].name);
+		printf("Added Name: %s\n", player_settlement->citizens[i].name);
+		
+	}
+	//active_element = GuiListView((Rectangle){10, 50, 200, 600}, list_items, &scrollindex, active_element);
+	active_element = GuiListViewEx((Rectangle){10, 50, 200, 600}, list_items, active_count, NULL, &scrollindex, active_element);
 }
 
 void ingame_draw()

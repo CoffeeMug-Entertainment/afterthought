@@ -13,6 +13,7 @@ add_executable(${PROJECT_NAME}
 								src/rsrc/font_SpaceMono.c
 								src/entities/george.c
 								src/impl.c
+								src/ui.c
 								src/drawing.c
 								src/pathfinding.c
 								src/menu.c
