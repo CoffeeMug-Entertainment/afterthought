@@ -33,6 +33,11 @@ Settlement settlement_generate()
 	new_settlement.wood = 0;
 	new_settlement.food = 0;
 
+	for (int i = 4; i < SET_MAX_CITIZENS; ++i)
+	{
+		new_settlement.citizens[i].type = CIT_INACTIVE;
+	}
+
 	return new_settlement;
 }
 

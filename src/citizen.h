@@ -1,6 +1,8 @@
 #ifndef AT_CITIZEN_H
 #define AT_CITIZEN_H 1
 
+#include "fix_string.h"
+
 typedef enum
 {
 	CIT_INACTIVE,
@@ -10,7 +12,7 @@ typedef enum
 
 struct at_citizen_s
 {
-	char name[50];
+	fix_string name;
 	unsigned int age;
 	citizen_type type;
 };

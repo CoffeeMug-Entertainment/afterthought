@@ -39,4 +39,6 @@ typedef struct at_settlement_s Settlement;
 Settlement settlement_generate();
 void settlement_tick(Settlement *self);
 
+extern Settlement *player_settlement;
+
 #endif

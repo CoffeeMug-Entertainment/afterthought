@@ -3,17 +3,25 @@
 
 #include "citizen.h"
 #include "raylib.h"
+#include "fix_string.h"
+
+typedef enum 
+{
+	EF_NONE = 0,
+	EF_ACTIVE = (1 << 0),
+	EF_MOVABLE = (1 << 1),
+} entity_flags;
 
 struct entity_s
 {
-	char name[10];
+	fix_string name;
 	Vector2 spritesheet_pos;
 
 	Vector2 pos;
 	Vector2 move_dir;
 	Vector2 target_pos;
 
-	Citizen citizens[10];
+	entity_flags flags;
 
 	void (*init)(struct entity_s *self);
 	void (*tick)(struct entity_s *self);
